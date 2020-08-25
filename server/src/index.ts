@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { MikroORM } from '@mikro-orm/core';
 import { __prod__ } from './constants';
 import mikroConfig from './mikro-orm.config';
+import 'dotenv-safe/config';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
@@ -13,6 +14,8 @@ import session from 'express-session';
 import connectRedis from 'connect-redis';
 import cors from 'cors';
 
+require('dotenv').config();
+
 const main = async () => {
   const orm = await MikroORM.init(mikroConfig);
   await orm.getMigrator().up();
@@ -21,7 +24,7 @@ const main = async () => {
 
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient();
-  app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+  app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 
   app.use(
     session({
@@ -34,7 +37,7 @@ const main = async () => {
         secure: __prod__, // cookie only works in https
       },
       saveUninitialized: false,
-      secret: 'dfjbdlgjd',
+      secret: process.env.SESSION_SECRET,
       resave: false,
     })
   );
