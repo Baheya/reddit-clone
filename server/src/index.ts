@@ -11,23 +11,23 @@ import Redis from 'ioredis';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import cors from 'cors';
-import { createConnection } from 'typeorm';
-import { Post } from './entities/Post';
-import { User } from './entities/User';
-import path from 'path';
-import { Upvote } from './entities/Upvote';
+// import { createConnection } from 'typeorm';
+// import { Post } from './entities/Post';
+// import { User } from './entities/User';
+// import path from 'path';
+// import { Upvote } from './entities/Upvote';
 import { createUserLoader } from './utils/createUserLoader';
 import { createUpvoteLoader } from './utils/createUpvoteLoader';
 
 const main = async () => {
-  const conn = await createConnection({
-    type: 'postgres',
-    url: process.env.DATABASE_URL,
-    logging: true,
-    // synchronize: true,
-    migrations: [path.join(__dirname, './migrations/*')],
-    entities: [Post, User, Upvote],
-  });
+  // const conn = await createConnection({
+  //   type: 'postgres',
+  //   url: process.env.DATABASE_URL,
+  //   logging: true,
+  //   // synchronize: true,
+  //   migrations: [path.join(__dirname, './migrations/*')],
+  //   entities: [Post, User, Upvote],
+  // });
 
   // await conn.runMigrations();
 
