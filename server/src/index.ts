@@ -20,7 +20,7 @@ import { createUserLoader } from './utils/createUserLoader';
 import { createUpvoteLoader } from './utils/createUpvoteLoader';
 
 const main = async () => {
-  await createConnection({
+  const conn = await createConnection({
     type: 'postgres',
     url:  process.env.HEROKU_POSTGRESQL_ORANGE_URL || process.env.DATABASE_URL,
     logging: true,
@@ -29,7 +29,7 @@ const main = async () => {
     entities: [Post, User, Upvote],
   });
 
-  // await conn.runMigrations();
+  await conn.runMigrations();
 
   // await Post.delete({});
 
