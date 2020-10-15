@@ -35,8 +35,10 @@ const main = async () => {
 
   const app = express();
 
+  const REDIS_URL = process.env.REDIS_URL || '127.0.0.1:6379';
+
   const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.REDIS_URL_DEV);
+  const redis = new Redis(REDIS_URL);
   app.set('proxy', 1);
   app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 
