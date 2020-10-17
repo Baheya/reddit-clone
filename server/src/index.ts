@@ -24,7 +24,7 @@ import next from 'next';
 const main = async () => {
 
   const dev = process.env.NODE_ENV !== 'production'
-  const nextApp = next({ dev, dir: `${path.join(__dirname, '../../web/src')}` })
+  const nextApp = next({ dev, dir: `${path.join(__dirname, '../../web/')}` })
   const handle = nextApp.getRequestHandler()
   
   await nextApp.prepare().then(async () => {
