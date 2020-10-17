@@ -1,7 +1,7 @@
 module.exports =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
-/******/ 	var installedModules = require('../ssr-module-cache.js');
+/******/ 	var installedModules = require('../../ssr-module-cache.js');
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -191,14 +191,6 @@ function assign(target, ...searchParamsList) {
 
 /***/ }),
 
-/***/ 4:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__("QeBL");
-
-
-/***/ }),
-
 /***/ "4Q3z":
 /***/ (function(module, exports) {
 
@@ -265,6 +257,14 @@ const EditDeletePostButtons = ({
 /***/ (function(module, exports) {
 
 module.exports = require("urql");
+
+/***/ }),
+
+/***/ 6:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("7TNE");
+
 
 /***/ }),
 
@@ -457,6 +457,95 @@ function _interopRequireWildcard(obj) {
 }
 
 module.exports = _interopRequireWildcard;
+
+/***/ }),
+
+/***/ "7TNE":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: external "@chakra-ui/core"
+var core_ = __webpack_require__("WKWs");
+
+// EXTERNAL MODULE: external "next-urql"
+var external_next_urql_ = __webpack_require__("DGsd");
+
+// EXTERNAL MODULE: external "react"
+var external_react_ = __webpack_require__("cDcd");
+var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
+
+// EXTERNAL MODULE: ./src/components/EditDeletePostButtons.tsx
+var EditDeletePostButtons = __webpack_require__("4Tsm");
+
+// EXTERNAL MODULE: ./src/components/Layout.tsx + 1 modules
+var Layout = __webpack_require__("soUV");
+
+// EXTERNAL MODULE: ./src/utils/createUrqlClient.ts + 1 modules
+var createUrqlClient = __webpack_require__("9LYk");
+
+// EXTERNAL MODULE: ./src/generated/graphql.tsx
+var graphql = __webpack_require__("pHx+");
+
+// EXTERNAL MODULE: ./src/utils/useGetIntId.ts
+var useGetIntId = __webpack_require__("xKEG");
+
+// CONCATENATED MODULE: ./src/utils/useGetPostFromUrl.ts
+
+
+const useGetPostFromUrl = () => {
+  const intId = Object(useGetIntId["a" /* useGetIntId */])();
+  return Object(graphql["i" /* usePostQuery */])({
+    pause: intId === -1,
+    variables: {
+      id: intId
+    }
+  });
+};
+// CONCATENATED MODULE: ./src/pages/post/[id].tsx
+var __jsx = external_react_default.a.createElement;
+
+
+
+
+
+
+
+
+const Post = ({}) => {
+  const [{
+    data,
+    fetching,
+    error
+  }] = useGetPostFromUrl();
+
+  if (fetching) {
+    return __jsx(Layout["a" /* Layout */], null, __jsx("div", null, "loading..."));
+  }
+
+  if (error) {
+    return __jsx("div", null, error.message);
+  }
+
+  if (!(data === null || data === void 0 ? void 0 : data.post)) {
+    return __jsx(Layout["a" /* Layout */], null, __jsx(core_["Box"], null, "Could not find post"));
+  }
+
+  return __jsx(Layout["a" /* Layout */], null, __jsx(core_["Heading"], {
+    mb: 4
+  }, data.post.title), __jsx(core_["Box"], {
+    mb: 4
+  }, data.post.text), __jsx(EditDeletePostButtons["a" /* EditDeletePostButtons */], {
+    id: data.post.id,
+    authorId: data.post.author.id
+  }));
+};
+
+/* harmony default export */ var _id_ = __webpack_exports__["default"] = (Object(external_next_urql_["withUrqlClient"])(createUrqlClient["a" /* createUrqlClient */], {
+  ssr: true
+})(Post));
 
 /***/ }),
 
@@ -746,170 +835,6 @@ const isServer = () => true;
 /***/ (function(module, exports) {
 
 module.exports = require("next/dist/next-server/lib/router-context.js");
-
-/***/ }),
-
-/***/ "QeBL":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: external "react"
-var external_react_ = __webpack_require__("cDcd");
-var external_react_default = /*#__PURE__*/__webpack_require__.n(external_react_);
-
-// EXTERNAL MODULE: external "@chakra-ui/core"
-var core_ = __webpack_require__("WKWs");
-
-// EXTERNAL MODULE: external "next-urql"
-var external_next_urql_ = __webpack_require__("DGsd");
-
-// EXTERNAL MODULE: ./node_modules/next/link.js
-var next_link = __webpack_require__("YFqc");
-var link_default = /*#__PURE__*/__webpack_require__.n(next_link);
-
-// EXTERNAL MODULE: ./src/components/EditDeletePostButtons.tsx
-var EditDeletePostButtons = __webpack_require__("4Tsm");
-
-// EXTERNAL MODULE: ./src/components/Layout.tsx + 1 modules
-var Layout = __webpack_require__("soUV");
-
-// EXTERNAL MODULE: ./src/generated/graphql.tsx
-var graphql = __webpack_require__("pHx+");
-
-// CONCATENATED MODULE: ./src/components/UpvoteSection.tsx
-var __jsx = external_react_default.a.createElement;
-
-
-
-const UpvoteSection = ({
-  post
-}) => {
-  const {
-    0: loadingState,
-    1: setLoadingState
-  } = Object(external_react_["useState"])('not-loading');
-  const [, vote] = Object(graphql["m" /* useVoteMutation */])();
-  return __jsx(core_["Flex"], {
-    direction: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    mr: 4
-  }, __jsx(core_["IconButton"], {
-    onClick: async () => {
-      if (post.voteStatus === 1) {
-        return;
-      }
-
-      setLoadingState('upvote-loading');
-      await vote({
-        postId: post.id,
-        value: 1
-      });
-      setLoadingState('not-loading');
-    },
-    variantColor: post.voteStatus === 1 ? 'green' : undefined,
-    isLoading: loadingState === 'upvote-loading',
-    icon: "chevron-up",
-    "aria-label": "upvote post"
-  }), post.votes, __jsx(core_["IconButton"], {
-    onClick: async () => {
-      if (post.voteStatus === -1) {
-        return;
-      }
-
-      setLoadingState('downvote-loading');
-      await vote({
-        postId: post.id,
-        value: -1
-      });
-      setLoadingState('not-loading');
-    },
-    variantColor: post.voteStatus === -1 ? 'red' : undefined,
-    isLoading: loadingState === 'downvote-loading',
-    icon: "chevron-down",
-    "aria-label": "downvote-post"
-  }));
-};
-// EXTERNAL MODULE: ./src/utils/createUrqlClient.ts + 1 modules
-var createUrqlClient = __webpack_require__("9LYk");
-
-// CONCATENATED MODULE: ./src/pages/index.tsx
-
-var pages_jsx = external_react_default.a.createElement;
-// import { DarkModeSwitch } from '../components/DarkModeSwitch';
-
-
-
-
-
-
-
-
-
-
-const Index = () => {
-  const {
-    0: variables,
-    1: setVariables
-  } = Object(external_react_["useState"])({
-    limit: 15,
-    cursor: null
-  });
-  const [{
-    data,
-    error,
-    fetching
-  }] = Object(graphql["j" /* usePostsQuery */])({
-    variables
-  });
-
-  if (!fetching && !data) {
-    return pages_jsx("div", null, pages_jsx("div", null, "no posts"), pages_jsx("div", null, error === null || error === void 0 ? void 0 : error.message));
-  }
-
-  return pages_jsx(Layout["a" /* Layout */], null, !data && fetching ? pages_jsx("div", null, "loading...") : pages_jsx(core_["Stack"], {
-    spacing: 8
-  }, data.posts.posts.map(p => !p ? null : pages_jsx(core_["Flex"], {
-    key: p.id,
-    p: 5,
-    shadow: "md",
-    borderWidth: "1px"
-  }, pages_jsx(UpvoteSection, {
-    post: p
-  }), pages_jsx(core_["Box"], {
-    flex: 1
-  }, pages_jsx(link_default.a, {
-    href: "/post/[id]",
-    as: `/post/${p.id}`
-  }, pages_jsx(core_["Link"], null, pages_jsx(core_["Heading"], {
-    fontSize: "xl"
-  }, p.title))), pages_jsx(core_["Text"], null, "posted by ", p.author.username), pages_jsx(core_["Flex"], {
-    align: "center"
-  }, pages_jsx(core_["Text"], {
-    flex: 1,
-    mt: 4
-  }, p.textSnippet), pages_jsx(EditDeletePostButtons["a" /* EditDeletePostButtons */], {
-    authorId: p.author.id,
-    id: p.id
-  })))))), data && data.posts.hasMore && pages_jsx(core_["Flex"], null, pages_jsx(core_["Button"], {
-    onClick: () => {
-      setVariables({
-        limit: variables.limit,
-        cursor: data.posts.posts[data.posts.posts.length - 1].createdAt
-      });
-    },
-    isLoading: fetching,
-    m: "auto",
-    my: 8
-  }, "Load more")));
-};
-
-/* harmony default export */ var pages = __webpack_exports__["default"] = (Object(external_next_urql_["withUrqlClient"])(createUrqlClient["a" /* createUrqlClient */], {
-  ssr: true
-})(Index));
 
 /***/ }),
 
@@ -2883,6 +2808,22 @@ const Wrapper = ({
     mt: 8,
     mx: "auto"
   }, children);
+};
+
+/***/ }),
+
+/***/ "xKEG":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return useGetIntId; });
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("4Q3z");
+/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_0__);
+
+const useGetIntId = () => {
+  const router = Object(next_router__WEBPACK_IMPORTED_MODULE_0__["useRouter"])();
+  const intId = typeof router.query.id === 'string' ? parseInt(router.query.id) : -1;
+  return intId;
 };
 
 /***/ })
