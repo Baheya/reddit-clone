@@ -81,11 +81,6 @@ const main = async () => {
   app.get('/', (_, res) => {
     res.send('hi');
   });
-
-  if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "client/build")));
-  }
-  
   app.listen(parseInt(process.env.PORT), () => {
     console.log('Hi from port 8080!');
   });
