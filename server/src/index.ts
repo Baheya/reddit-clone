@@ -50,6 +50,7 @@ const main = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years,
         httpOnly: true,
         sameSite: 'lax', // csrf
+        domain: 'https://conceptually-reddit.herokuapp.com',
         secure: __prod__, // cookie only works in https
       },
       saveUninitialized: false,
