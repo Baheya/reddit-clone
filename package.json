@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "engines": {
-    "node": "12.x"
-  },
   "scripts": {
     "install": "(cd server && npm i) & (cd web && npm i)",   
     "heroku-postbuild": "cd web && npm run build && mv build ../server/",
