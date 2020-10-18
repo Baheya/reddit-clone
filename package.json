@@ -10,7 +10,7 @@
     "install": "(cd server && npm i) & (cd web && npm i)",
     "postinstall": "(cd server && npm run build) & (cd web && npm run build)",
     "start": "if [ \"$NODE_ENV\" == \"production\" ]; then cd server && npm run start; else cd server && npm start & (cd web && npm start); fi"
-  },
+},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Baheya/reddit-clone.git"
@@ -21,9 +21,5 @@
   "bugs": {
     "url": "https://github.com/Baheya/reddit-clone/issues"
   },
-  "homepage": "https://github.com/Baheya/reddit-clone#readme",
-  "dependencies": {
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0"
-  }
+  "homepage": "https://github.com/Baheya/reddit-clone#readme"
 }
