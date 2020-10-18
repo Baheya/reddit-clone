@@ -7,7 +7,7 @@
     "node": "12.x"
   },
   "scripts": {
-    "install": "(npm i) && (cd server && npm i) & (cd web && npm i)",
+    "install": "(npm i) & (cd server && npm i) & (cd web && npm i)",
     "postinstall": "(cd server && npm run build) & (cd web && npm run build)",
     "start": "if [ \"$NODE_ENV\" == \"production\" ]; then cd server && npm run start; else cd server && npm start & (cd web && npm start); fi"
   },
