@@ -90,7 +90,7 @@ const main = async () => {
     return handle(req, res)
   })
   
-  app.listen(process.env.PORT, () => {
+  app.listen(parseInt(process.env.PORT), () => {
     console.log('Hi from port 8080!');
   });
 
