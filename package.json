@@ -9,8 +9,7 @@
   "scripts": {
     "install": "(cd server && npm i) & (cd web && npm i)",   
     "heroku-postbuild": "cd web && npm run build && mv /build ../server/",
-    "start": "if [ \"$NODE_ENV\" == \"production\" ]; then cd server && npm run start; else cd server && npm start & (cd web && npm start); fi",
-    "postinstall":"tsc"
+    "start": "if [ \"$NODE_ENV\" == \"production\" ]; then cd server && npm run start-prod; else cd server && npm start & (cd web && npm start); fi"
 },
   "repository": {
     "type": "git",
