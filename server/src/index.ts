@@ -20,13 +20,15 @@ import { createUserLoader } from './utils/createUserLoader';
 import { createUpvoteLoader } from './utils/createUpvoteLoader';
 import next from 'next';
 
-const nextApp = next({ dev: process.env.NODE_ENV !== 'production', dir: path.join(__dirname, '../../web')})
-
-
 
 const main = async () => {
-  const app = express();
+
+  const dev = process.env.NODE_ENV !== 'production'
+  const nextApp = next({ dev, dir: `${path.join(__dirname, '../../web/')}` })
+  const handle = nextApp.getRequestHandler()
   
+  await nextApp.prepare().then(async () => {
+    const app = express();
 
     const conn = await createConnection({
     type: 'postgres',
@@ -79,25 +81,25 @@ const main = async () => {
     }),
   });
 
-  await bootstrapClientApp(app);
-
   apolloServer.applyMiddleware({
     app,
     cors: false,
   });
 
+  app.get('*', (req, res) => {
+    return handle(req, res)
+  })
   
   app.listen(process.env.PORT, () => {
     console.log('Hi from port 8080!');
   });
+
+  }).catch((ex) => {
+  console.error(ex.stack)
+  process.exit(1)
+})
   
 };
-
-async function bootstrapClientApp(expressApp: any) {
-  await nextApp.prepare();
-  expressApp.get('*', nextApp.getRequestHandler());
-}
-
 
 main().catch((err) => {
   console.error(err);
