@@ -83,7 +83,7 @@ const main = async () => {
   });
 
   if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../web/build")));
+  app.use(express.static(path.join(__dirname, "client/build")));
   }
   
   app.listen(parseInt(process.env.PORT), () => {
