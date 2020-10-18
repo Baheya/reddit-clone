@@ -49,7 +49,7 @@ const main = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years,
         httpOnly: true,
-        sameSite: __prod__ ? 'none' : 'lax', // csrf
+        sameSite: 'lax', // csrf
         domain: __prod__ ? ".vercel.app" : undefined,
         secure: __prod__, // cookie only works in https
       },
