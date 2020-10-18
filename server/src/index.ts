@@ -22,7 +22,7 @@ import { createUpvoteLoader } from './utils/createUpvoteLoader';
 const main = async () => {
   const conn = await createConnection({
     type: 'postgres',
-    url:  process.env.HEROKU_POSTGRESQL_ORANGE_URL || process.env.DATABASE_URL,
+    url:  process.env.DATABASE_URL,
     logging: true,
     // synchronize: true,
     migrations: [path.join(__dirname, './migrations/*')],
@@ -35,7 +35,7 @@ const main = async () => {
 
   const app = express();
 
-  const REDIS_URL = process.env.REDIS_URL || '127.0.0.1:6379';
+  const REDIS_URL = process.env.REDIS_URL;
 
   const RedisStore = connectRedis(session);
   const redis = new Redis(REDIS_URL);
@@ -50,7 +50,6 @@ const main = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years,
         httpOnly: true,
         sameSite: 'lax', // csrf
-        domain: __prod__ ? ".vercel.app" : undefined,
         secure: __prod__, // cookie only works in https
       },
       saveUninitialized: false,
@@ -82,7 +81,7 @@ const main = async () => {
     res.send('hi');
   });
   app.listen(parseInt(process.env.PORT), () => {
-    console.log('Hi from port 8080!');
+    console.log(`Hi from port ${process.env.PORT}!`);
   });
 };
 
