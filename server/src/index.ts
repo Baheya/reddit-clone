@@ -24,7 +24,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 const main = async () => {
 
   const dev = process.env.NODE_ENV !== 'production';
-  const nextApp = next({ dev, dir: `${path.join(__dirname, '../../web/')}` });
+  const nextApp = next({ dev });
   const handle = nextApp.getRequestHandler();
 
   await nextApp.prepare().then(async () => {
