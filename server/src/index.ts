@@ -18,7 +18,6 @@ import path from 'path';
 import { Upvote } from './entities/Upvote';
 import { createUserLoader } from './utils/createUserLoader';
 import { createUpvoteLoader } from './utils/createUpvoteLoader';
-import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const main = async () => {
 
@@ -79,8 +78,6 @@ const main = async () => {
     app,
     cors: false,
   });
-
-  app.use('/graphql', createProxyMiddleware({ target: 'https://conceptually-reddit-api.herokuapp.com', changeOrigin: true }));
 
     
   app.get('/', (_, res) => {
