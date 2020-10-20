@@ -18,71 +18,91 @@ import path from 'path';
 import { Upvote } from './entities/Upvote';
 import { createUserLoader } from './utils/createUserLoader';
 import { createUpvoteLoader } from './utils/createUpvoteLoader';
+import next from 'next';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const main = async () => {
-  const conn = await createConnection({
-    type: 'postgres',
-    url:  process.env.DATABASE_URL,
-    logging: true,
-    // synchronize: true,
-    migrations: [path.join(__dirname, './migrations/*')],
-    entities: [Post, User, Upvote],
-  });
 
-  await conn.runMigrations();
+  const dev = process.env.NODE_ENV !== 'production';
+  const nextApp = next({ dev, dir: `${path.join(__dirname, '../../web/')}` });
+  const handle = nextApp.getRequestHandler();
 
-  // await Post.delete({});
+  await nextApp.prepare().then(async () => {
 
-  const app = express();
 
-  const REDIS_URL = process.env.REDIS_URL;
+    const conn = await createConnection({
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
+      logging: true,
+      // synchronize: true,
+      migrations: [path.join(__dirname, './migrations/*')],
+      entities: [Post, User, Upvote],
+    });
 
-  const RedisStore = connectRedis(session);
-  const redis = new Redis(REDIS_URL);
-  app.set('trust proxy', 1);
-  app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+    await conn.runMigrations();
 
-  app.use(
-    session({
-      name: COOKIE_NAME,
-      store: new RedisStore({ client: redis, disableTouch: true }),
-      cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years,
-        httpOnly: true,
-        sameSite: 'none', // csrf
-        domain: 'https://conceptually-reddit.herokuapp.com',
-        secure: __prod__, // cookie only works in https
-      },
-      saveUninitialized: false,
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-    })
-  );
+    // await Post.delete({});
 
-  const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver, UserResolver],
-      validate: false,
-    }),
-    context: ({ req, res }) => ({
-      req,
-      res,
-      redis,
-      userLoader: createUserLoader(),
-      upvoteLoader: createUpvoteLoader(),
-    }),
-  });
+    const app = express();
 
-  apolloServer.applyMiddleware({
-    app,
-    cors: false,
-  });
+    const REDIS_URL = process.env.REDIS_URL;
 
-  app.get('/', (_, res) => {
-    res.send('hi');
-  });
-  app.listen(parseInt(process.env.PORT), () => {
-    console.log(`Hi from port ${process.env.PORT}!`);
+    const RedisStore = connectRedis(session);
+    const redis = new Redis(REDIS_URL);
+    app.set('trust proxy', 1);
+    app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+
+    app.use(
+      session({
+        name: COOKIE_NAME,
+        store: new RedisStore({ client: redis, disableTouch: true }),
+        cookie: {
+          maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years,
+          httpOnly: true,
+          sameSite: 'lax', // csrf
+          secure: __prod__, // cookie only works in https
+        },
+        saveUninitialized: false,
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+      })
+    );
+
+    const apolloServer = new ApolloServer({
+      schema: await buildSchema({
+        resolvers: [HelloResolver, PostResolver, UserResolver],
+        validate: false,
+      }),
+      context: ({ req, res }) => ({
+        req,
+        res,
+        redis,
+        userLoader: createUserLoader(),
+        upvoteLoader: createUpvoteLoader(),
+      }),
+    });
+
+    apolloServer.applyMiddleware({
+      app,
+      cors: false,
+    });
+
+    app.use('/graphql', createProxyMiddleware({ target: 'https://conceptually-reddit-api.herokuapp.com', changeOrigin: true }));
+
+
+      app.get('*', (req, res) => {
+    return handle(req, res)
+      })
+    
+    app.get('/', (_, res) => {
+      res.send('hi');
+    });
+    app.listen(parseInt(process.env.PORT), () => {
+      console.log(`Hi from port ${process.env.PORT}!`);
+    });
+  }).catch((ex) => {
+    console.error(ex.stack)
+    process.exit(1)
   });
 };
 
