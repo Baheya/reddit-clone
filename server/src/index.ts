@@ -1,23 +1,23 @@
 import 'reflect-metadata';
 import 'dotenv-safe/config';
-import { __prod__, COOKIE_NAME } from './src/constants';
+import { __prod__, COOKIE_NAME } from './constants';
 import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
-import { HelloResolver } from './src/resolvers/hello';
-import { PostResolver } from './src/resolvers/post';
-import { UserResolver } from './src/resolvers/user';
+import { HelloResolver } from './resolvers/hello';
+import { PostResolver } from './resolvers/post';
+import { UserResolver } from './resolvers/user';
 import Redis from 'ioredis';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import cors from 'cors';
 import { createConnection } from 'typeorm';
-import { Post } from './src/entities/Post';
-import { User } from './src/entities/User';
+import { Post } from './entities/Post';
+import { User } from './entities/User';
 import path from 'path';
-import { Upvote } from './src/entities/Upvote';
-import { createUserLoader } from './src/utils/createUserLoader';
-import { createUpvoteLoader } from './src/utils/createUpvoteLoader';
+import { Upvote } from './entities/Upvote';
+import { createUserLoader } from './utils/createUserLoader';
+import { createUpvoteLoader } from './utils/createUpvoteLoader';
 
 const main = async () => {
 
@@ -53,7 +53,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
-        domain: __prod__ ? ".baheya.dev" : undefined,
+        domain: ".baheya.dev",
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,
@@ -80,10 +80,7 @@ const main = async () => {
     cors: false,
   });
 
-    
-  app.get('/', (_, res) => {
-    res.send('hi');
-  });
+
   app.listen(parseInt(process.env.PORT), () => {
     console.log(`Hi from port ${process.env.PORT}!`);
   });
