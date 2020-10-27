@@ -1,4 +1,3 @@
-// import { DarkModeSwitch } from '../components/DarkModeSwitch';
 import { Box, Button, Flex, Heading, Link, Stack, Text } from '@chakra-ui/core';
 import { withUrqlClient } from 'next-urql';
 import NextLink from 'next/link';
