@@ -54,6 +54,7 @@ const main = async () => {
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
         domain: ".baheya.dev",
+        path: '/',
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,
