@@ -1,6 +1,6 @@
 import { cacheExchange, Resolver, Cache } from '@urql/exchange-graphcache';
 import gql from 'graphql-tag';
-import { dedupExchange, Exchange, fetchExchange } from 'urql';
+import { dedupExchange, Exchange, fetchExchange, stringifyVariables } from 'urql';
 import { pipe, tap } from 'wonka';
 import {
   LoginMutation,
@@ -13,13 +13,8 @@ import {
 } from '../generated/graphql';
 import { betterUpdateQuery } from './betterUpdateQuery';
 import Router from 'next/router';
-
-import { stringifyVariables } from '@urql/core';
 import { isServer } from './isServer';
 
-export interface PaginationParams {
-  offsetArgument?: string;
-}
 
 const cursorPagination = (): Resolver => {
   return (_parent, fieldArgs, cache, info) => {
@@ -45,7 +40,7 @@ const cursorPagination = (): Resolver => {
       const key = cache.resolveFieldByKey(entityKey, fi.fieldKey) as string;
       const data = cache.resolve(key, 'posts') as string[];
       const _hasMore = cache.resolve(key, 'hasMore');
-      if (_hasMore) {
+      if (!_hasMore) {
         hasMore = _hasMore as boolean;
       }
       results.push(...data);
@@ -64,7 +59,7 @@ export const errorExchange: Exchange = ({ forward }) => (ops$) => {
     forward(ops$),
     tap(({ error }) => {
       if (error?.message.includes('not authenticated')) {
-        Router.replace('/');
+        Router.replace('/login');
       }
     })
   );

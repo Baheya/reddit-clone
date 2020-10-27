@@ -13,7 +13,7 @@ import {
   ObjectType,
 } from 'type-graphql';
 import { Post } from '../entities/Post';
-import { MyContext } from 'src/types';
+import { MyContext } from '../types';
 import { isAuth } from '../middleware/isAuth';
 import { getConnection } from 'typeorm';
 import { Upvote } from '../entities/Upvote';
@@ -38,8 +38,8 @@ class PaginatedPosts {
 @Resolver(Post)
 export class PostResolver {
   @FieldResolver(() => String)
-  textSnippet(@Root() root: Post) {
-    return root.text.slice(0, 50);
+  textSnippet(@Root() post: Post) {
+    return post.text.slice(0, 50);
   }
 
   @FieldResolver(() => User)
@@ -105,14 +105,13 @@ export class PostResolver {
         await tm.query(
           `
           insert into upvote ("userId", "postId", value)
-          values ($1,$2,$3)
+          values ($1, $2, $3)
         `,
           [userId, postId, realValue]
         );
 
         await tm.query(
           `
-
     update post
     set votes = votes + $1
     where id = $2
@@ -127,9 +126,7 @@ export class PostResolver {
   @Query(() => PaginatedPosts)
   async posts(
     @Arg('limit', () => Int) limit: number,
-    @Arg('cursor', () => String, { nullable: true }) cursor: string | null,
-    @Ctx() {}: MyContext
-  ): Promise<PaginatedPosts> {
+    @Arg('cursor', () => String, { nullable: true }) cursor: string | null): Promise<PaginatedPosts> {
     const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;
 

@@ -26,7 +26,6 @@ const Index = () => {
   }
   return (
     <Layout>
-      {/* <DarkModeSwitch /> */}
       {!data && fetching ? (
         <div>loading...</div>
       ) : (
@@ -46,8 +45,9 @@ const Index = () => {
                     <Text flex={1} mt={4}>
                       {p.textSnippet}
                     </Text>
-
-                    <EditDeletePostButtons authorId={p.author.id} id={p.id} />
+                    <Box ml="auto">
+                      <EditDeletePostButtons authorId={p.author.id} id={p.id} />
+                      </Box>
                   </Flex>
                 </Box>
               </Flex>

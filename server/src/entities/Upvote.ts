@@ -1,9 +1,8 @@
-import { ObjectType } from 'type-graphql';
 import { Entity, Column, BaseEntity, ManyToOne, PrimaryColumn } from 'typeorm';
 import { User } from './User';
 import { Post } from './Post';
 
-@ObjectType()
+
 @Entity()
 export class Upvote extends BaseEntity {
   @Column({ type: 'int' })

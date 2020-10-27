@@ -9,7 +9,7 @@ import {
   FieldResolver,
   Root,
 } from 'type-graphql';
-import { MyContext } from 'src/types';
+import { MyContext } from '../types';
 import { User } from '../entities/User';
 import argon2 from 'argon2';
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX } from '../constants';
@@ -173,7 +173,6 @@ export class UserResolver {
           ],
         };
       }
-      console.log('message: ' + err.message);
     }
     // store user id session
     // this will set a cookie on the user
@@ -193,7 +192,7 @@ export class UserResolver {
         ? {
             where: {
               email: usernameOrEmail,
-            },
+            }
           }
         : { where: { username: usernameOrEmail } }
     );
