@@ -41,7 +41,7 @@ const main = async () => {
 
   const RedisStore = connectRedis(session);
   const redis = new Redis(REDIS_URL);
-  app.set('trust proxy', 2);
+  app.set('trust proxy', 1);
   app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
 
   app.use(
@@ -53,7 +53,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
-        domain: "blog.baheya.dev",
+        domain: ".baheya.dev",
         path: '/',
       },
       saveUninitialized: false,
