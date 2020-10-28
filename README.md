@@ -15,4 +15,6 @@ Includes the follow technologies:
 - TypeGraphQL
 - Chakra
 
+The backend is deployed on DigitalOcean using Dokku, and the frontend is hosted on Vercel but can be found on my portfolio website, blog.baheya.dev.
+
 Currently working on getting cookies to work in deployment.
