@@ -53,8 +53,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: 'lax', // csrf
         secure: __prod__, // cookie only works in https
-        domain: ".baheya.dev",
-        path: '/',
+        domain: __prod__ ? ".baheyakhalifa.com" : undefined,
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,
